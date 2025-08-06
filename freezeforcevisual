@@ -1,0 +1,143 @@
+-- Zeeo Hub GUI with Avatar (Put in a LocalScript inside StarterGui)
+
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Create GUI container
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "ZeeoHubGUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+-- Main draggable frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 240)
+frame.Position = UDim2.new(0.65, 0, 0.3, 0)
+frame.BackgroundColor3 = Color3.fromRGB(10, 10, 50) -- Navy blue
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+frame.Parent = screenGui
+
+-- Title label
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0.15, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "Zeeo Hub"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 22
+title.BackgroundTransparency = 1
+title.Parent = frame
+
+-- Username input
+local usernameBox = Instance.new("TextBox")
+usernameBox.Size = UDim2.new(0.8, 0, 0.15, 0)
+usernameBox.Position = UDim2.new(0.1, 0, 0.2, 0)
+usernameBox.PlaceholderText = "Enter username"
+usernameBox.Text = ""
+usernameBox.Font = Enum.Font.SourceSans
+usernameBox.TextSize = 18
+usernameBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+usernameBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+usernameBox.ClearTextOnFocus = false
+usernameBox.Parent = frame
+
+-- Avatar Image (circular)
+local avatarImage = Instance.new("ImageLabel")
+avatarImage.Size = UDim2.new(0, 60, 0, 60)
+avatarImage.Position = UDim2.new(0.5, -30, 0.4, 0)
+avatarImage.BackgroundTransparency = 1
+avatarImage.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+avatarImage.Parent = frame
+
+-- Round the avatar image into a circle
+local avatarUICorner = Instance.new("UICorner")
+avatarUICorner.CornerRadius = UDim.new(1, 0)
+avatarUICorner.Parent = avatarImage
+
+-- Freeze Button (🧊)
+local freezeButton = Instance.new("TextButton")
+freezeButton.Size = UDim2.new(0.4, -5, 0.15, 0)
+freezeButton.Position = UDim2.new(0.1, 0, 0.7, 0)
+freezeButton.Text = "🧊 Freeze"
+freezeButton.Font = Enum.Font.SourceSansBold
+freezeButton.TextSize = 16
+freezeButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+freezeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+freezeButton.Parent = frame
+
+-- Force Button (💪)
+local forceButton = Instance.new("TextButton")
+forceButton.Size = UDim2.new(0.4, -5, 0.15, 0)
+forceButton.Position = UDim2.new(0.5, 10, 0.7, 0)
+forceButton.Text = "💪 Force"
+forceButton.Font = Enum.Font.SourceSansBold
+forceButton.TextSize = 16
+forceButton.BackgroundColor3 = Color3.fromRGB(255, 85, 0)
+forceButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+forceButton.Parent = frame
+
+-- Footer label
+local footer = Instance.new("TextLabel")
+footer.Size = UDim2.new(1, 0, 0.1, 0)
+footer.Position = UDim2.new(0, 0, 0.9, 0)
+footer.Text = "Enter a username to load avatar"
+footer.TextColor3 = Color3.fromRGB(255, 255, 255)
+footer.Font = Enum.Font.SourceSans
+footer.TextSize = 16
+footer.BackgroundTransparency = 1
+footer.Parent = frame
+
+-- Avatar loading logic
+local function updateAvatar()
+	local username = usernameBox.Text
+	if username == "" then
+		avatarImage.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+		return
+	end
+
+	local success, userId = pcall(function()
+		return Players:GetUserIdFromNameAsync(username)
+	end)
+
+	if success then
+		local thumbType = Enum.ThumbnailType.HeadShot
+		local thumbSize = Enum.ThumbnailSize.Size100x100
+		local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+		if isReady then
+			avatarImage.Image = content
+		end
+	else
+		avatarImage.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+	end
+end
+
+usernameBox.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		updateAvatar()
+	end
+end)
+
+-- Click Events
+freezeButton.MouseButton1Click:Connect(function()
+	local name = usernameBox.Text
+	if name == "" then name = "[unknown]" end
+	StarterGui:SetCore("SendNotification", {
+		Title = "Freeze Script";
+		Text = "🧊 Attempting to freeze " .. name;
+		Duration = 3;
+	})
+end)
+
+forceButton.MouseButton1Click:Connect(function()
+	local name = usernameBox.Text
+	if name == "" then name = "[unknown]" end
+	StarterGui:SetCore("SendNotification", {
+		Title = "Force Script";
+		Text = "💪 Forcing trade accept on " .. name;
+		Duration = 3;
+	})
+end)
