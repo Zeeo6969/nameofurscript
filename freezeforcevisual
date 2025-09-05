@@ -3,7 +3,7 @@ local StarterGui = game:GetService("StarterGui")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- === Main GUI ===
+-- dih
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "ZeeoHubGUI"
 screenGui.ResetOnSpawn = false
@@ -18,7 +18,7 @@ frame.Active = true
 frame.Draggable = true
 frame.Parent = screenGui
 
--- Title
+-- even more dih
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0.15, 0)
 title.Position = UDim2.new(0, 0, 0, 0)
@@ -29,7 +29,7 @@ title.TextSize = 22
 title.BackgroundTransparency = 1
 title.Parent = frame
 
--- Username box
+-- box i think
 local usernameBox = Instance.new("TextBox")
 usernameBox.Size = UDim2.new(0.8, 0, 0.15, 0)
 usernameBox.Position = UDim2.new(0.1, 0, 0.2, 0)
@@ -54,7 +54,7 @@ local avatarUICorner = Instance.new("UICorner")
 avatarUICorner.CornerRadius = UDim.new(1, 0)
 avatarUICorner.Parent = avatarImage
 
--- Buttons
+-- Button 67 and 41
 local freezeButton = Instance.new("TextButton")
 freezeButton.Size = UDim2.new(0.4, -5, 0.15, 0)
 freezeButton.Position = UDim2.new(0.1, 0, 0.7, 0)
@@ -106,7 +106,7 @@ footer.TextSize = 16
 footer.BackgroundTransparency = 1
 footer.Parent = frame
 
--- Avatar update
+-- Avatar again
 local function updateAvatar()
 	local username = usernameBox.Text
 	if username == "" then
